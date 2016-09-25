@@ -1,0 +1,11 @@
+packages/
+node_modules/
+passwords.coffee
+usernames.coffee
+license.coffee
+mails.coffee
+websites.coffee
+abbreviations.coffee
+vocabulary.coffee
+vocabulary_alternate.coffee
+generated/*
