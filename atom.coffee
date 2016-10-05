@@ -1,5 +1,6 @@
 pack = Packages.get 'atom'
 
+# smarter-delete-line package
 pack.implement
   scope: 'atom-editor-focused'
 ,
@@ -11,6 +12,7 @@ pack.implement
     else
       @runAtomCommand 'deleteToBeginningOfLine', null, true
 
+# toggle quotes package, does not work for some reason
 # pack.command 'toggle-quotes',
 #   spoken: 'quotely'
 #   action: ->
@@ -118,7 +120,7 @@ pack.implement
     @runAtomCommand "trigger", {selector: 'atom-workspace',
     command: 'duplicate-line-or-selection:duplicate'}, true
 
-
+# expense selection package
 pack.command "select-scope",
   spoken: 'cell scope'
   scope: 'atom'
