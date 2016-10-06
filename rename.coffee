@@ -56,9 +56,12 @@ renameList =
   'symbols:hashtag': 'pound'
   'symbols:exclamation': 'claymore'
   'symbols:comma-space': 'swipe'
+  'text-manipulation:move-line-down': 'swoom'
+  'text-manipulation:move-line-up': 'sweep'
 _.each renameList, (value, key, list) ->
   Commands.changeSpoken key, value
 
+Commands.addMisspellings 'text-manipulation:move-line-up', ['sweeple', 'weep', 'weap']
 Commands.addMisspellings 'symbols:at', ['ludo']
 Commands.addMisspellings 'symbols:comma-space', ['swype']
 Commands.addMisspellings 'symbols:surround-double-quotes', ['coif']
