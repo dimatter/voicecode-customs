@@ -16,16 +16,21 @@ pack.implement
     @key 'a', 'control'
   'cursor:way-right': ->
     @key 'e', 'control'
-
+  'object:refresh': ->
+    @key 'c', 'control'
+    @key 'c', 'control'
+    @key 'c', 'control'
+    @key 'up'
+    @enter()
 pack.commands
   'npm-install': ->
     spoken: 'npm install'
     action: ->
-      @string 's  '
-  'npm-install': ->
-    spoken: 'npm install'
-    action: ->
       @string 'npm install '
+  'npm-install-save': ->
+    spoken: 'npm install save'
+    action: ->
+      @string 'npm install --save'
   'npm-install-development': ->
     spoken: 'npm install development'
     action: ->
@@ -39,9 +44,9 @@ pack.commands
     action: ->
       @string 'wget '
   '1-directory-up':
-    spoken: '1 up'
+    spoken: 'one up'
     action: ->
-      @string '../ '
+      @string '../'
   # 'scan-all-parts':
   #   spoken: 'shell scan all ports'
   #   action: ->
