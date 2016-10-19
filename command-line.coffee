@@ -22,16 +22,16 @@ pack.implement
     @key 'c', 'control'
     @key 'up'
     @enter()
-pack.commands
-  'npm-install': ->
+pack.commands {enabled: true},
+  'npm-install':
     spoken: 'npm install'
     action: ->
       @string 'npm install '
-  'npm-install-save': ->
+  'npm-install-save':
     spoken: 'npm install save'
     action: ->
       @string 'npm install --save'
-  'npm-install-development': ->
+  'npm-install-development':
     spoken: 'npm install development'
     action: ->
       @string 'npm install --only=dev'
