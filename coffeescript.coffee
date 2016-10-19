@@ -4,7 +4,7 @@ Scope.register
     editor = _.find(@currentApplication().editors, {focused: true})
     return false unless editor?
     result = _.difference ['source.coffee'], editor.scopes
-    result.length isnt 2
+    result.length isnt 1
 Chain.preprocess {
   name: 'coffeescript magic replacements!'
   scope: 'atom-coffeescript-file'
