@@ -54,21 +54,22 @@ pack.command 'atom-pane-control',
   grammarType: 'custom'
   description : ''
   tags : ["my", "atom"]
-  rule: '(paneAction) (pane) (whichPane)'
+  rule: '(paneAction) (whichPane) (whichPane)?'
   variables:
     paneAction: ['fog', 'split']
-    pane:
-      'pane': 'pane'
-      '_pain': 'pane'
     whichPane: ['left', 'right', 'up', 'down']
-  action: ({paneAction, whichPane}) ->
-    switch paneAction
-      when 'fog'
-        @key "K", ["command"]
-        @key whichPane, ["command"]
-      when 'split'
-        @key "K", ["command"]
-        @key whichPane
+  action: ({paneAction, whichPane, whichPane1}) ->
+    times = if whichPane1?  then 2 else 1
+    which = [whichPane, whichPane1]
+    _.times times, (index) =>
+      w = which[index]
+      switch paneAction
+        when 'fog'
+          @key "K", ["command"]
+          @key w, ["command"]
+        when 'split'
+          @key "K", ["command"]
+          @key w
 
 pack.command 'kill-pane',
   spoken: "kill pane"
@@ -80,15 +81,16 @@ pack.command 'kill-pane',
     @key "W", ["command"]
 
 pack.command "atom-tab-control",
-  spoken: 'fog tab'
+  spoken: 'fog'
   grammarType : "custom"
   description : ""
   tags : ["my", "atom"]
-  rule: '<spoken> (digits)'
+  rule: '<spoken> (numbers)'
   variables:
-    digits: _.keys Settings.digits
-  action : ({digits}) ->
-    @key Settings.digits[digits], ["command"]
+    numbers: _.take (_.values Settings.modifiers.modifierSuffixes), 9
+  action : ({numbers: number}) ->
+    @key _.findKey(Settings.modifiers.modifierSuffixes
+    , _.matches(number)), ["command"]
 
 global.Commands.mapping['common:find'].grammarType = 'custom'
 global.Commands.mapping['common:find'].rule = '<spoken> (findAction)?'
@@ -181,3 +183,15 @@ pack.command 'select-inside-brackets',
       selector: '.platform-darwin atom-text-editor.is-focused'
       command: 'bracket-matcher:select-inside-brackets'
     }, true
+
+pack.implement
+  'common:find-next': ->
+    @runAtomCommand 'trigger', {
+      selector: '.preview-pane.project-find-navigation'
+      command: 'project-find-navigation:show-next'
+    }
+  'common:find-previous': ->
+    @runAtomCommand 'trigger', {
+      selector: '.preview-pane.project-find-navigation'
+      command: 'project-find-navigation:show-prev'
+    }

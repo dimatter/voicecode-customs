@@ -191,3 +191,6 @@ Events.on 'shouldStringBePasted', (shouldPaste) ->
     shouldPaste.yesNo = no
     shouldPaste.continue = no
   shouldPaste
+
+
+Settings.darwin.applicationsThatNeedLaunchingWithApplescript = []

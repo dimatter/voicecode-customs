@@ -8,3 +8,7 @@
 #   spoken: 'testicle'
 #   action: ->
 #     @string 'testing'
+# TODO: fix
+# Package.before
+#   'os:string': (input, context) ->
+#     console.log arguments
