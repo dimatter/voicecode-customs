@@ -85,6 +85,8 @@ _.extend Settings,
         finder: 'Path Finder'
         vivi: 'Vivaldi'
         foxy: 'FirefoxDeveloperEdition'
+        slacker: 'Slack'
+        sorcerer: 'SourceTree'
     darwin:
       applicationsThatNeedExplicitModifierPresses: [
         'Screen Sharing'

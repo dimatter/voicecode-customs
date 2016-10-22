@@ -61,6 +61,7 @@ renameList =
 _.each renameList, (value, key, list) ->
   Commands.changeSpoken key, value
 
+Commands.addMisspellings 'cursor:right', ['ricci']
 Commands.addMisspellings 'text-manipulation:move-line-up', ['sweeple', 'weep', 'weap']
 Commands.addMisspellings 'symbols:at', ['ludo']
 Commands.addMisspellings 'symbols:comma-space', ['swype']
