@@ -74,10 +74,11 @@ random.commands
   enabled: true
 ,
   'hide-window':
-    spoken: 'cassie' # Esperanto: kaŝi
+    spoken: 'cassie' # Esperanto: kaŝi, english: can't see
     action: ->
       @key 'h', 'command'
   'random-keyboard-shortcut':
+    continuous: false
     spoken: 'key binder'
     action: ->
       {modifierPrefixes, modifierSuffixes} = randoms.get('modifiers').settings()
@@ -88,34 +89,50 @@ random.commands
       modifiers = modifierPrefixes[_.random(modifierPrefixes.length)]
       key = modifierSuffixes[_.random(modifierSuffixes.length)]
       @key key, modifiers
+  'flip-the-table-smily':
+    spoken: 'table flip'
+    action: ->
+      switch _.random 1, 4
+        when 1
+          @paste '(╯°□°）╯︵ ┻━┻'
+        when 2
+          @paste '(ﾉಥ益ಥ）ﾉ﻿ ┻━┻'
+        when 3
+          @paste '(ノಠ益ಠ)ノ彡┻━┻'
+        when 4
+          @paste '(ﾉ≧∇≦)ﾉ ﾐ ┸━┸'
+  'put-the-table-back':
+    spoken: 'table set'
+    action: ->
+      @paste '┬─┬ノ( º _ ºノ)'
   'who-knows-smily':
     spoken: 'smug shrug'
     action: ->
       @paste '¯\\_(ツ)_/¯'
+  'delete-symmetrical':
+    spoken: 'slurp'
+    action: ->
+      @do 'common:delete'
+      @do 'common:forward-delete'
   'take-a-screenshot':
     spoken: 'headshot'
     action: ->
       @key '4', 'shift command'
   'quit-application':
-    spoken: 'mortigi'
+    spoken: 'mortigi' # esperanto
     action: ->
       @key 'q', 'command'
   'force-quit-application':
-    spoken: 'forto mortigi'
+    spoken: 'forto mortigi' # esperanto
     action: ->
       @key 'escape', 'command option shift'
   'minimize-window':
     spoken: 'mini me'
-    needsCommand: false
     enabled: true
     action: ->
       @key 'm', 'command'
   'double-quotes-paded-left':
     spoken: "pre-coif"
-    kind : "action"
-    grammarType : "individual"
-    description : ""
-    aliases : []
     tags : ["my", "symbols"]
     action : (input) ->
       if @currentApplication().name is "Atom" and Settings.atom.bracketMatcher
@@ -125,10 +142,6 @@ random.commands
         @left()
   'single-quotes-padded-left':
     spoken: "pre-posh"
-    kind : "action"
-    grammarType : "individual"
-    description : ""
-    aliases : []
     tags : ["my", "symbols"]
     action : (input) ->
       if @currentApplication().name is "Atom" and Settings.atom.bracketMatcher

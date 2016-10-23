@@ -58,6 +58,10 @@ renameList =
   'symbols:comma-space': 'swipe'
   'text-manipulation:move-line-down': 'swoom'
   'text-manipulation:move-line-up': 'sweep'
+  'cursor:partial-word-left': 'skippy'
+  'cursor:partial-word-right': 'skipper'
+  'delete:partial-word': 'sleepy'
+  'delete:partial-word-forward': 'sleeper'
 _.each renameList, (value, key, list) ->
   Commands.changeSpoken key, value
 

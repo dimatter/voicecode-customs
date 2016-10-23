@@ -13,46 +13,51 @@ pack.implement
       @runAtomCommand 'deleteToBeginningOfLine', null, true
 
 # toggle quotes package, does not work for some reason
-# pack.command 'toggle-quotes',
-#   spoken: 'quotely'
-#   action: ->
-#     @runAtomCommand "trigger",
-#       command: 'toggle-quotes:toggle'
-#       selector: 'atom-workspace'
-#     , true
+pack.command 'toggle-quotes',
+  spoken: 'quotely'
+  enabled: true
+  tags : ["my", "atom"]
+  action: ->
+    @runAtomCommand "trigger",
+      command: 'toggle-quotes:toggle'
+      selector: 'atom-text-editor'
+    , true
 
 pack.command "add-project-folder",
   spoken: 'add project folder'
   needsCommand: false
+  tags : ["my", "atom"]
   enabled: true
   action: ->
-    @key 'O', 'shift command'
+    @runAtomCommand 'trigger',
+      command: 'application:add-project-folder'
+      selector: 'body'
+    , true
+
 
 pack.command "command",
   spoken: 'commander'
   needsCommand: false
-  description : ""
-  aliases : []
   tags : ["my", "atom"]
   continuous: false
   action : (input) ->
-    @key 'p', 'command shift'
+    @runAtomCommand 'trigger',
+      command: 'command-palette:toggle'
+      selector: 'atom-workspace'
+    , true
 
 pack.command "beautify",
   spoken: 'beautify'
   needsCommand: false
-  description : ""
-  aliases : []
   tags : ["my", "atom"]
   action : (input) ->
     @runAtomCommand 'trigger',
       command: 'atom-beautify:beautify-editor'
-      selector: 'atom-text-editor'
+      selector: 'atom-workspace'
     , false
 
 pack.command 'atom-pane-control',
   grammarType: 'custom'
-  description : ''
   tags : ["my", "atom"]
   rule: '(paneAction) (whichPane) (whichPane)?'
   variables:
@@ -73,8 +78,6 @@ pack.command 'atom-pane-control',
 
 pack.command 'kill-pane',
   spoken: "kill pane"
-  description : ""
-  aliases : []
   tags : ["my", "atom"]
   action : (input) ->
     @key "K", ["command"]
@@ -83,7 +86,6 @@ pack.command 'kill-pane',
 pack.command "atom-tab-control",
   spoken: 'fog'
   grammarType : "custom"
-  description : ""
   tags : ["my", "atom"]
   rule: '<spoken> (numbers)'
   variables:
@@ -104,7 +106,6 @@ pack.implement
     else
       action = @fuzzyMatch(["next", "reg", "case",
        "selection", "replace all", "project"], findAction)
-      console.log "action: #{action}"
       switch action
         when "next"
           @key "g", "command"
@@ -122,13 +123,35 @@ pack.implement
     @runAtomCommand "trigger", {selector: 'atom-workspace',
     command: 'duplicate-line-or-selection:duplicate'}, true
 
+# last cursor position package
+pack.command "travel-previous",
+  enabled: true
+  spoken: 'travel'
+  grammarType: 'integerCapture'
+  tags : ["my", "atom"]
+  action : (input) ->
+    input ?= 1
+    _.times input, (index) =>
+      @runAtomCommand "trigger", {
+        selector: 'atom-workspace'
+        command: "last-cursor-position:previous"
+      }, true
+pack.command "travel-next",
+  enabled: true
+  spoken: 'trevor'
+  grammarType: 'integerCapture'
+  tags : ["my", "atom"]
+  action : (input) ->
+    input ?= 1
+    _.times input, =>
+      @runAtomCommand "trigger", {
+        selector: 'atom-workspace'
+        command: "last-cursor-position:next"
+      }, true
+
 # expense selection package
 pack.command "select-scope",
   spoken: 'cell scope'
-  scope: 'atom'
-  grammarType : "individual"
-  description : ""
-  aliases : []
   tags : ["my", "atom"]
   misspellings: ['sell scope']
   action : (input) ->
@@ -136,17 +159,26 @@ pack.command "select-scope",
       selector: 'atom-workspace'
       command: "expand-selection:expand"
     }, true
-
+pack.command 'delete-scope',
+  spoken: 'drainer'
+  tags : ["my", "atom"]
+  misspellings: ['trainer']
+  action: ->
+    @do 'atom:select-scope'
+    @do 'common:delete'
 
 pack.command "before-next-occurrence",
   spoken: "pre-#{Commands.mapping['selection:next-occurrence'].spoken}"
+  tags : ["my", "atom"]
   grammarType: "singleSearch"
   action: (findable) ->
+    @right()
     @do 'selection:next-occurrence', findable
     @left()
 pack.command "after-next-occurrence",
   enabled: true
   spoken: "post #{Commands.mapping['selection:next-occurrence'].spoken}"
+  tags : ["my", "atom"]
   grammarType: "singleSearch"
   action: (findable) ->
     @do 'selection:next-occurrence', findable
@@ -155,6 +187,7 @@ pack.command "after-next-occurrence",
 pack.command "before-previous-occurrence",
   spoken: "pre-#{Commands
   .mapping['selection:previous-occurrence'].spoken}"
+  tags : ["my", "atom"]
   grammarType: "singleSearch"
   action: (findable) ->
     @do 'selection:previous-occurrence', findable
@@ -162,8 +195,10 @@ pack.command "before-previous-occurrence",
 pack.command "after-previous-occurrence",
   spoken: "post #{Commands
   .mapping['selection:previous-occurrence'].spoken}"
+  tags : ["my", "atom"]
   grammarType: "singleSearch"
   action: (findable) ->
+    @left()
     @do 'selection:previous-occurrence', findable
     @right()
 
@@ -178,20 +213,86 @@ pack.command 'go-to-matching-bracket',
 pack.command 'select-inside-brackets',
   spoken: 'grab brax'
   enabled: true
+  tags : ["my", "atom"]
   action: ->
     @runAtomCommand "trigger", {
       selector: '.platform-darwin atom-text-editor.is-focused'
       command: 'bracket-matcher:select-inside-brackets'
     }, true
 
+# coffee paste package
+pack.command 'coffee-paste-package',
+  tags : ["my", "atom"]
+  grammarType: 'custom'
+  enabled: true
+  rule: '(coffeePasteAction) as (coffeePasteLanguage)'
+  variables:
+    coffeePasteAction: ['copy', 'paste']
+    coffeePasteLanguage: ['coffee', 'java']
+  action: ({coffeePasteAction, coffeePasteLanguage})->
+    if coffeePasteAction is 'copy' and coffeePasteLanguage is 'coffee'
+      action = 'js2Coffee'
+    if coffeePasteAction is 'copy' and coffeePasteLanguage is 'java'
+      action = 'coffee2Js'
+    if coffeePasteAction is 'paste' and coffeePasteLanguage is 'coffee'
+      action = 'asCoffee'
+    if coffeePasteAction is 'paste' and coffeePasteLanguage is 'java'
+      action = 'asJs'
+    @runAtomCommand "trigger", {
+      selector: 'atom-workspace'
+      command: "coffee-paste:#{action}"
+    }, false
+
 pack.implement
+  # project find navigation package
   'common:find-next': ->
     @runAtomCommand 'trigger', {
       selector: '.preview-pane.project-find-navigation'
       command: 'project-find-navigation:show-next'
-    }
+    }, false
+  # project find navigation package
   'common:find-previous': ->
     @runAtomCommand 'trigger', {
       selector: '.preview-pane.project-find-navigation'
       command: 'project-find-navigation:show-prev'
-    }
+    }, false
+  'window:close': ->
+    @runAtomCommand 'trigger', {
+      command: 'core:close'
+      selector: 'body'
+    }, false
+  'object:next': ->
+    @runAtomCommand 'trigger', {
+      command: 'pane:show-next-item'
+      selector: 'body'
+    }, true
+  'object:previous': ->
+    @runAtomCommand 'trigger', {
+      command: 'pane:show-previous-item'
+      selector: 'body'
+    }, true
+  'selection:all': ->
+    @runAtomCommand 'trigger', {
+      command: 'core:select-all'
+      selector: 'atom-text-editor.is-focused'
+    }, true
+  'delete:partial-word': ->
+    @runAtomCommand 'trigger', {
+      command: 'editor:delete-to-beginning-of-subword'
+      selector: 'atom-text-editor.is-focused'
+    }, true
+  'delete:partial-word-forward': ->
+    @runAtomCommand 'trigger', {
+      command: 'editor:delete-to-end-of-subword'
+      selector: 'atom-text-editor.is-focused'
+    }, true
+  'cursor:partial-word-right': ->
+    @runAtomCommand 'trigger', {
+      command: 'editor:move-to-next-subword-boundary'
+      selector: 'atom-text-editor.is-focused'
+    }, true
+  'cursor:partial-word-left': ->
+    @runAtomCommand 'trigger', {
+      command: 'editor:move-to-previous-subword-boundary'
+      selector: 'atom-text-editor.is-focused'
+    }, true
