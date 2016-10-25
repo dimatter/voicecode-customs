@@ -81,11 +81,11 @@ random.commands
     continuous: false
     spoken: 'key binder'
     action: ->
-      {modifierPrefixes, modifierSuffixes} = randoms.get('modifiers').settings()
+      {modifierPrefixes, modifierSuffixes} = Packages.get('modifiers').settings()
       modifierPrefixes = _.values modifierPrefixes
       modifierSuffixes = _.keys modifierSuffixes
       modifierSuffixes = _.union modifierSuffixes
-      , _.keys randoms.get('alphabet').settings().letters
+      , _.keys Packages.get('alphabet').settings().letters
       modifiers = modifierPrefixes[_.random(modifierPrefixes.length)]
       key = modifierSuffixes[_.random(modifierSuffixes.length)]
       @key key, modifiers
