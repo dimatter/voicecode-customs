@@ -69,23 +69,20 @@ Commands.addMisspellings 'selection:next-occurrence', ['cruel']
 Commands.addMisspellings 'cursor:right', ['ricci']
 Commands.addMisspellings 'cursor:left', ['leaky']
 Commands.addMisspellings 'object:duplicate', ['gerald']
-Commands.addMisspellings 'text-manipulation:move-line-up'
-, ['sweeple', 'weep', 'weap']
+Commands.addMisspellings 'text-manipulation:move-line-up', ['sweeple', 'weep', 'weap']
 Commands.addMisspellings 'symbols:at', ['ludo']
 Commands.addMisspellings 'symbols:comma-space', ['swype']
 Commands.addMisspellings 'symbols:surround-double-quotes', ['coif']
 Commands.addMisspellings 'common:escape', ['rendell', 'randel']
 Commands.addMisspellings 'symbols:dot', ['doug']
-Commands.addMisspellings 'format:capitalize-next-word'
-, ['cham', 'champs', 'jim']
+Commands.addMisspellings 'format:capitalize-next-word', ['cham', 'champs', 'jim']
 Commands.addMisspellings 'selection:all', ['ali', 'olie']
 Commands.addMisspellings 'common:enter', ['chuck', 'shop']
 Commands.addMisspellings 'core:delimiter', ['shannon']
 Commands.addMisspellings 'symbols:double-vertical-bar-padded', ['goalposts']
 Commands.addMisspellings 'format:camel', ['graham', 'crime', 'creme']
 Commands.addMisspellings 'selection:extend-to-next-occurrence', ['cell crew']
-Commands.addMisspellings 'selection:extend-to-previous-occurrence'
-, ['cell trail']
+Commands.addMisspellings 'selection:extend-to-previous-occurrence', ['cell trail']
 Commands.addMisspellings 'format:dots', ['dotsway', 'dots way']
 Commands.addMisspellings 'symbols:double-quote', ['coif ring', 'coyf ring']
 Commands.addMisspellings 'symbols:single-quote', ['posh ring']
@@ -93,8 +90,13 @@ Commands.addMisspellings 'symbols:single-right-arrow', ['lembo']
 Commands.addMisspellings 'symbols:space', ['frank', 'pranks', 'prick', 'brink']
 Commands.addMisspellings 'symbols:right-angle', ['grayling']
 Commands.addMisspellings 'symbols:colon', ['colin']
-Commands.addMisspellings 'symbols:surround-single-quotes', ['plush', 'bosch']
+Commands.addMisspellings 'symbols:surround-single-quotes', ['plush', 'bosch', 'porsche']
 Commands.addMisspellings 'common:delete', ['john']
 Commands.addMisspellings 'delete:way-left', ['nipple']
 Commands.addMisspellings 'repetition:command-2', ['snoop']
 Packages.get('alphabet').settings {letters: {r: 'rush', m: 'mish'}}
+
+
+Package.implement
+  'editor:move-to-line-number': -> # misspelling fallback
+    @do 'symbols:space'

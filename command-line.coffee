@@ -6,8 +6,17 @@ Events.on 'willParsePhrase', (container) ->
     container.phrase = container.phrase.replace 'get the', 'get'
     container.phrase = container.phrase.replace 'pseudo-', 'sudo '
     container.phrase = container.phrase.replace 'secure shell', 'ssh '
-    container.phrase = container.phrase.replace 'recall', 'history|grep '
   container
+
+# if repository url in the clipboard - automatically clone it
+pack.after
+  'git:git-command': ({option}) ->
+    return unless option is 'clone'
+    clipboard = @getClipboard()
+    if clipboard.match /\.git$/
+      @space()
+      @paste()
+      @enter()
 
 pack.implement
   'os:undo': ->
@@ -23,6 +32,18 @@ pack.implement
     @key 'up'
     @enter()
 pack.commands {enabled: true},
+  'history':
+    spoken: 'history'
+    needsCommand: false
+    action: ->
+      @string 'history'
+      @enter()
+      @string '!!'
+  'history-search':
+    spoken: 'history search'
+    needsCommand: false
+    action: ->
+      @string 'history|grep '
   'npm-install':
     spoken: 'npm install'
     action: ->
@@ -37,14 +58,17 @@ pack.commands {enabled: true},
       @string 'npm install --only=dev'
   'clear':
     spoken: 'clear'
+    needsCommand: false
     action: ->
       @key 'k', 'command'
   'web-get':
     spoken: 'web get'
+    needsCommand: false
     action: ->
       @string 'wget '
   '1-directory-up':
     spoken: 'one up'
+    needsCommand: false
     action: ->
       @string '../'
   # 'scan-all-parts':
@@ -64,12 +88,14 @@ pack.commands {enabled: true},
   'list-jails':
     enabled: true
     spoken: 'jail list'
+    needsCommand: false
     action: ->
       @string 'jls'
       @do 'common:enter'
       @string 'jexec '
   'switch-to-superuser':
     spoken: 'I am root'
+    needsCommand: false
     action: ->
       @string 'sudo su'
       @do 'common:enter'

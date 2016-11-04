@@ -4,6 +4,10 @@ pack = Packages.get 'atom'
 pack.implement
   scope: 'atom-editor-focused'
 ,
+  'clipboard:copy': ->
+    @atomBuffer = @runAtomCommand 'getSelection', {}, true
+  'clipboard:paste': ->
+    @string @atomBuffer
   'delete:way-left': ->
     isMini = _.find(@currentApplication().editors, {focused: true, mini: true})?
     if not isMini
@@ -12,8 +16,9 @@ pack.implement
     else
       @runAtomCommand 'deleteToBeginningOfLine', null, true
 
-# toggle quotes package, does not work for some reason
+# toggle quotes package
 pack.command 'toggle-quotes',
+  scope: 'atom-editor-focused'
   spoken: 'quotely'
   enabled: true
   tags : ["my", "atom"]
@@ -48,6 +53,7 @@ pack.command "command",
 
 pack.command "beautify",
   spoken: 'beautify'
+  scope: 'atom-editor-focused'
   needsCommand: false
   tags : ["my", "atom"]
   action : (input) ->
@@ -149,7 +155,7 @@ pack.command "travel-next",
         command: "last-cursor-position:next"
       }, true
 
-# expense selection package
+# expand selection package
 pack.command "select-scope",
   spoken: 'cell scope'
   tags : ["my", "atom"]
@@ -220,6 +226,35 @@ pack.command 'select-inside-brackets',
       command: 'bracket-matcher:select-inside-brackets'
     }, true
 
+pack.command 'single-quotes-around-next-word',
+  spoken: 'posh neck'
+  enabled: true
+  tags : ["my", "atom"]
+  action: ->
+    @do 'selection:next-word'
+    @string "'"
+pack.command 'double-quotes-around-next-word',
+  spoken: 'coyf neck'
+  enabled: true
+  tags : ["my", "atom"]
+  action: ->
+    @do 'selection:next-word'
+    @string '"'
+pack.command 'single-quotes-around-previous-word',
+  spoken: 'posh preev'
+  enabled: true
+  tags : ["my", "atom"]
+  action: ->
+    @do 'selection:previous-word'
+    @string "'"
+pack.command 'double-quotes-around-previous-word',
+  spoken: 'coyf preev'
+  enabled: true
+  tags : ["my", "atom"]
+  action: ->
+    @do 'selection:previous-word'
+    @string '"'
+
 # coffee paste package
 pack.command 'coffee-paste-package',
   tags : ["my", "atom"]
@@ -243,6 +278,15 @@ pack.command 'coffee-paste-package',
       command: "coffee-paste:#{action}"
     }, false
 
+Events.on 'currentApplicationWillChange', ({from, to}) ->
+  ourBundle = pack.options.applications[0]
+  if to.bundleId is ourBundle and from.bundleId isnt ourBundle
+    Actions.atomBuffer = Actions.getClipboard()
+  if from.bundleId is ourBundle and to.bundleId isnt ourBundle
+    if Actions.atomBuffer?
+      Actions.setClipboard Actions.atomBuffer
+      Actions.atomBuffer = null
+  arguments[0]
 pack.implement
   # project find navigation package
   'common:find-next': ->

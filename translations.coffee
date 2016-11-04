@@ -13,3 +13,4 @@ module.exports =
   'and p.m.': 'npm'
   'npm in it': 'npm init'
   'colonel': 'kernel'
+  'jason': 'json'

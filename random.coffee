@@ -200,10 +200,12 @@ Commands.mapping['audio:decrease-volume'].continuous = true
 Commands.mapping['audio:increase-volume'].continuous = true
 
 Events.on 'shouldStringBePasted', (shouldPaste) ->
-  if Actions.currentApplication().name is 'Screen Sharing'
+  if Actions.currentApplication().name in ['Screen Sharing', 'Microsoft Remote Desktop', 'Royal TSX']
     shouldPaste.yesNo = no
     shouldPaste.continue = no
   shouldPaste
 
 
 Settings.darwin.applicationsThatNeedLaunchingWithApplescript = []
+Settings.darwin =
+  applicationsThatNeedExplicitModifierPresses: ['Microsoft Remote Desktop', 'Royal TSX']

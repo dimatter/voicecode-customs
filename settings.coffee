@@ -49,6 +49,8 @@ _.extend Settings,
     core:
       slaves:
         development: ["localhost", 31337]
+        fusion: ["192.168.1.105", 31337]
+        barrel: ["192.168.1.101", 31337]
     vocabulary:
       vocabulary: require './vocabulary'
       vocabularyAlternate: require './vocabulary_alternate'
