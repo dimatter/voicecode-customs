@@ -6,6 +6,9 @@ pack.implement
 ,
   'clipboard:copy': ->
     @atomBuffer = @runAtomCommand 'getSelection', {}, true
+  'clipboard:cut': ->
+    @atomBuffer = @runAtomCommand 'getSelection', {}, true
+    @do 'common:delete'
   'clipboard:paste': ->
     @string @atomBuffer
   'delete:way-left': ->
