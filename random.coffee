@@ -22,16 +22,6 @@ Events.on 'willParsePhrase', (container) ->
   container.phrase = container.phrase.replace 's wipe', ' swipe'
   container
 
-Events.on 'packageReady', (pack) ->
-  if pack.name is 'myo'
-    _.every Packages.get('random')?.settings().myApplications,
-      (app, spoken) ->
-        pack.after
-          "random:open-#{spoken}": ->
-            Events.removeListener 'commandDidExecute', conditionalAction1
-            pack.action = 'application:next.window'
-            Events.once 'chainDidExecute', ->
-              Events.on 'commandDidExecute', conditionalAction1
 
 random.command 'open-developer-tools',
     spoken: "dev tools"
