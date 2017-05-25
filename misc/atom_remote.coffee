@@ -1,4 +1,13 @@
 return {
+  nextCharacterAfterCursor: (__, callback) ->
+    editor = @_editor()
+    unless editor?
+      callback 'no editor'
+      returnt
+    position = editor.getCursorBufferPosition()
+    result = editor.getTextInBufferRange([position, [position.row, position.column+1]])
+    callback(null, result)
+
   placeCursorInsideParameters: ({direction}, callback) ->
     distance = 1
     editor = @_editor()

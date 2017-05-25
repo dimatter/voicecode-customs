@@ -20,6 +20,8 @@ Chain.preprocess {
             return 'const '
           else if arg is 'constant'
             return 'const '
+          else if arg is 'and'
+            return '&&'
           else if arg is 'letter'
             return 'let '
           else
@@ -30,3 +32,14 @@ Chain.preprocess {
 
       newChain
     , []
+
+pack = Packages.get('atom')
+pack.implement
+  scope: 'atom-javascript-file'
+,
+  'symbols:double-right-arrow-padded': ->
+    result = @runAtomCommand 'nextCharacterAfterCursor', null, true
+    console.log result
+    if result is ')'
+      @do 'cursor:right'
+    @string ' => '
