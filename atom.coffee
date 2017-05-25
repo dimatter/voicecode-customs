@@ -234,30 +234,37 @@ pack.command 'single-quotes-around-next-word',
   enabled: true
   tags : ["my", "atom"]
   action: ->
-    @do 'selection:next-word'
-    @string "'"
+    @runAtomCommand 'wrapWord', {distance: 1, wrapper: "'", direction: 1}, false
 pack.command 'double-quotes-around-next-word',
   spoken: 'coyf neck'
   enabled: true
   tags : ["my", "atom"]
   action: ->
-    @do 'selection:next-word'
-    @string '"'
+    @runAtomCommand 'wrapWord', {distance: 1, wrapper: '"', direction: 1}, false
 pack.command 'single-quotes-around-previous-word',
   spoken: 'posh preev'
   enabled: true
   tags : ["my", "atom"]
   action: ->
-    @do 'selection:previous-word'
-    @string "'"
+    @runAtomCommand 'wrapWord', {distance: 1, wrapper: "'", direction: -1}, false
 pack.command 'double-quotes-around-previous-word',
   spoken: 'coyf preev'
   enabled: true
   tags : ["my", "atom"]
   action: ->
-    @do 'selection:previous-word'
-    @string '"'
-
+    @runAtomCommand 'wrapWord', {distance: 1, wrapper: '"', direction: -1}, false
+pack.command 'cursor-inside-parameter-list-forward',
+  spoken: 'kegger'
+  enabled: true
+  tags : ["my", "atom"]
+  action: ->
+    @runAtomCommand 'placeCursorInsideParameters', {direction: 1}, false
+pack.command 'cursor-inside-parameter-lists-backward',
+  spoken: 'cagle'
+  enabled: true
+  tags : ["my", "atom"]
+  action: ->
+    @runAtomCommand 'placeCursorInsideParameters', {direction: -1}, false
 # coffee paste package
 pack.command 'coffee-paste-package',
   tags : ["my", "atom"]
